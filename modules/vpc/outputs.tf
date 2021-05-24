@@ -13,3 +13,11 @@ output "vpc_public_subnets" {
 output "vpc_private_subnets" {
   value = module.vpc.private_subnets
 }
+
+output "internal_sg" {
+  value = aws_security_group.internal.id
+}
+
+output "web_sg" {
+  value = aws_security_group.web.id
+}

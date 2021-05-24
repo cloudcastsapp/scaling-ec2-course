@@ -10,16 +10,16 @@ variable "vpc_cidr" {
 }
 
 variable "azs" {
-  type = list(string)
+  type        = list(string)
   description = "AZs to create subnets into"
 }
 
 variable "public_subnets" {
-  type = list(string)
+  type        = list(string)
   description = "subnets to create for public network traffic, one per AZ"
 }
 
 variable "private_subnets" {
-  type = list(string)
+  type        = list(string)
   description = "subnets to create for private network traffic, one per AZ"
 }
