@@ -1,7 +1,7 @@
 # https://registry.terraform.io/modules/terraform-aws-modules/vpc/aws/latest
 module "vpc" {
   source  = "terraform-aws-modules/vpc/aws"
-  version = "3.0.0"
+  version = "3.2.0"
 
   # insert the 49 required variables here
   name = "cloudcasts-${var.infra_env}-vpc"
