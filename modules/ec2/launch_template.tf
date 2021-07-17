@@ -18,14 +18,14 @@ resource "aws_launch_template" "launch_template" {
   vpc_security_group_ids = var.security_groups
 
   tags = merge(
-  {
-    Name        = "cloudcasts-${var.infra_env}-${var.infra_role}-lt"
-    Role        = var.infra_role
-    Project     = "cloudcasts.io"
-    Environment = var.infra_env
-    ManagedBy   = "terraform"
-  },
-  var.tags
+    {
+      Name        = "cloudcasts-${var.infra_env}-${var.infra_role}-lt"
+      Role        = var.infra_role
+      Project     = "cloudcasts.io"
+      Environment = var.infra_env
+      ManagedBy   = "terraform"
+    },
+    var.tags
   )
 
   # See: https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/launch_template#tag-specifications

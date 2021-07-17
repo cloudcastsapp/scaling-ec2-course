@@ -35,19 +35,19 @@ variable "ssh_key_name" {
 }
 
 variable "tags" {
-  type = map(string)
-  default = {}
+  type        = map(string)
+  default     = {}
   description = "launch template tags"
 }
 
 variable "instance_tags" {
-  type = map(string)
-  default = {}
+  type        = map(string)
+  default     = {}
   description = "tags for the ec2 instances"
 }
 
 variable "volume_tags" {
-  type = map(string)
-  default = {}
+  type        = map(string)
+  default     = {}
   description = "tags for the ebs volumes attached to instances"
 }
