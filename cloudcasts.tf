@@ -94,6 +94,10 @@ module "autoscale_web" {
   instance_type   = "t3a.small"
   security_groups = [module.vpc.internal_sg, module.vpc.web_sg]
   ssh_key_name    = "cloudcasts-forge"
+
+  asg_subnets = module.vpc.vpc_private_subnets
+  alb_subnets = module.vpc.vpc_public_subnets
+  vpc_id      = module.vpc.vpc_id
 }
 
 module "autoscale_queue" {
@@ -106,4 +110,7 @@ module "autoscale_queue" {
   instance_type   = "t3a.small"
   security_groups = [module.vpc.internal_sg]
   ssh_key_name    = "cloudcasts-forge"
+
+  asg_subnets = module.vpc.vpc_private_subnets
+  vpc_id      = module.vpc.vpc_id
 }

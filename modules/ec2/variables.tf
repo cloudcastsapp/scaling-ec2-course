@@ -51,3 +51,19 @@ variable "volume_tags" {
   default     = {}
   description = "tags for the ebs volumes attached to instances"
 }
+
+variable "asg_subnets" {
+  type        = list(string)
+  description = "list of private subnet ID's to allow ASG to place instances"
+}
+
+variable "alb_subnets" {
+  type        = list(string)
+  default     = []
+  description = "list of public subnet ID's to allow the load balancer to use"
+}
+
+variable "vpc_id" {
+  type        = string
+  description = "vpc to add ALB into"
+}
