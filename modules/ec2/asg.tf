@@ -27,3 +27,20 @@ resource "aws_autoscaling_attachment" "asg_attachment" {
   autoscaling_group_name = aws_autoscaling_group.this.id
   alb_target_group_arn   = aws_lb_target_group.this[0].arn
 }
+
+resource "aws_autoscaling_policy" "http" {
+  count = var.infra_role == "http" ? 1 : 0
+
+  name = "cloudcasts-${var.infra_env}-${var.infra_role}-asg-policy"
+  adjustment_type = "ChangeInCapacity"
+  policy_type = "TargetTrackingScaling"
+
+  target_tracking_configuration {
+    predefined_metric_specification {
+      predefined_metric_type = "ASGAverageCPUUtilization"
+    }
+    target_value = 50.0 # Attempts to keep CPU utilization at 50%
+  }
+
+  autoscaling_group_name = aws_autoscaling_group.this.name
+}
