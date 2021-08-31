@@ -38,6 +38,17 @@ variable "default_region" {
   default     = "us-east-2"
 }
 
+variable "github_token" {
+  type        = string
+  description = "GitHub Personal Access Token"
+  sensitive   = true
+}
+
+variable "git_url" {
+  type        = string
+  description = "Git Clone URL (.git)"
+}
+
 locals {
   cidr_subnets = cidrsubnets("10.0.0.0/17", 4, 4, 4, 4, 4, 4)
 }
@@ -88,7 +99,7 @@ module "autoscale_web" {
   source = "./modules/ec2"
 
   ami             = data.aws_ami.app.id
-  git_url         = "git@github.com:cloudcastsapp/cloudcasts-sample-application.git"
+  git_url         = var.git_url
   infra_env       = var.infra_env
   infra_role      = "http"
   instance_type   = "t3a.small"
@@ -104,7 +115,7 @@ module "autoscale_queue" {
   source = "./modules/ec2"
 
   ami             = data.aws_ami.app.id
-  git_url         = "git@github.com:cloudcastsapp/cloudcasts-sample-application.git"
+  git_url         = var.git_url
   infra_env       = var.infra_env
   infra_role      = "queue"
   instance_type   = "t3a.small"
@@ -113,4 +124,12 @@ module "autoscale_queue" {
 
   asg_subnets = module.vpc.vpc_private_subnets
   vpc_id      = module.vpc.vpc_id
+}
+
+module "ci_cd" {
+  source = "./modules/codebuild"
+
+  infra_env    = var.infra_env
+  git_url      = var.git_url
+  github_token = var.github_token
 }
