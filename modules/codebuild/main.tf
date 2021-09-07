@@ -15,7 +15,7 @@ resource "aws_iam_role" "this" {
     {
       "Effect": "Allow",
       "Principal": {
-        "Service": "codebuild.amazonaws.com"
+        "Service": "codebuild.us-east-2.amazonaws.com"
       },
       "Action": "sts:AssumeRole"
     }
