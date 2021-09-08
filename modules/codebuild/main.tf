@@ -1,5 +1,3 @@
-data "aws_caller_identity" "current" {}
-
 resource "aws_s3_bucket" "artifacts" {
   bucket = "cloudcasts-${var.infra_env}-artifacts"
   acl    = "private"
@@ -53,13 +51,6 @@ resource "aws_iam_role_policy" "this" {
         "${aws_s3_bucket.artifacts.arn}",
         "${aws_s3_bucket.artifacts.arn}/*"
       ]
-    },
-    {
-      "Effect": "Allow",
-      "Action": [
-        "ssm:GetParameter"
-      ],
-      "Resource": "arn:aws:ssm:us-east-2:${data.aws_caller_identity.current.account_id}:parameter/cloudcasts/${var.infra_env}/*"
     }
   ]
 }

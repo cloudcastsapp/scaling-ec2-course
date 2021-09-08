@@ -29,7 +29,7 @@ resource "aws_autoscaling_attachment" "asg_attachment" {
 }
 
 resource "aws_autoscaling_policy" "http" {
-  count = var.infra_role == "http" ? 1 : 0
+  count = 0 //var.infra_role == "http" ? 1 : 0
 
   name = "cloudcasts-${var.infra_env}-${var.infra_role}-asg-policy"
   adjustment_type = "ChangeInCapacity"

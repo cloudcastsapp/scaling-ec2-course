@@ -67,3 +67,8 @@ variable "vpc_id" {
   type        = string
   description = "vpc to add ALB into"
 }
+
+variable "artifact_bucket" {
+  type        = string
+  description = "Application artifact bucket"
+}

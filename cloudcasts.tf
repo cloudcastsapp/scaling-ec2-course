@@ -109,6 +109,8 @@ module "autoscale_web" {
   asg_subnets = module.vpc.vpc_private_subnets
   alb_subnets = module.vpc.vpc_public_subnets
   vpc_id      = module.vpc.vpc_id
+
+  artifact_bucket = module.ci_cd.artifact_bucket
 }
 
 module "autoscale_queue" {
@@ -124,6 +126,8 @@ module "autoscale_queue" {
 
   asg_subnets = module.vpc.vpc_private_subnets
   vpc_id      = module.vpc.vpc_id
+
+  artifact_bucket = module.ci_cd.artifact_bucket
 }
 
 module "ci_cd" {
@@ -132,4 +136,22 @@ module "ci_cd" {
   infra_env    = var.infra_env
   git_url      = var.git_url
   github_token = var.github_token
+}
+
+module "deploy_app" {
+  source = "./modules/codedeploy"
+
+  infra_env    = var.infra_env
+  deploy_groups = {
+    http: {
+      traffic: "WITH_TRAFFIC_CONTROL",
+      asg: module.autoscale_web.asg_group_name
+      alb: module.autoscale_web.alb_target_group_name
+    },
+    queue: {
+      traffic: "WITHOUT_TRAFFIC_CONTROL",
+      asg: module.autoscale_queue.asg_group_name
+      alb: null
+    }
+  }
 }
