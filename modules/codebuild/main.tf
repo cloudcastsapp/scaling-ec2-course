@@ -51,6 +51,17 @@ resource "aws_iam_role_policy" "this" {
         "${aws_s3_bucket.artifacts.arn}",
         "${aws_s3_bucket.artifacts.arn}/*"
       ]
+    },
+    {
+        "Action": [
+            "codedeploy:Batch*",
+            "codedeploy:CreateDeployment",
+            "codedeploy:Get*",
+            "codedeploy:List*",
+            "codedeploy:RegisterApplicationRevision"
+        ],
+        "Effect": "Allow",
+        "Resource": "*"
     }
   ]
 }
