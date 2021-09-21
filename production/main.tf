@@ -11,7 +11,7 @@ terraform {
 
   backend "s3" {
     bucket  = "cloudcasts-courses"
-    key     = "best-parts/terraform.tfstate"
+    key     = "best-parts/production.tfstate"
     profile = "cloudcasts"
     region  = "us-east-2"
   }
@@ -29,19 +29,13 @@ provider "aws" {
 variable "infra_env" {
   type        = string
   description = "infrastructure environment"
-  default     = "staging"
+  default     = "production"
 }
 
 variable "default_region" {
   type        = string
   description = "the region this infrastructure is in"
   default     = "us-east-2"
-}
-
-variable "github_token" {
-  type        = string
-  description = "GitHub Personal Access Token"
-  sensitive   = true
 }
 
 variable "git_url" {
@@ -128,14 +122,6 @@ module "autoscale_queue" {
   vpc_id      = module.vpc.vpc_id
 
   artifact_bucket = module.ci_cd.artifact_bucket
-}
-
-module "ci_cd" {
-  source = "./modules/codebuild"
-
-  infra_env    = var.infra_env
-  git_url      = var.git_url
-  github_token = var.github_token
 }
 
 module "deploy_app" {
