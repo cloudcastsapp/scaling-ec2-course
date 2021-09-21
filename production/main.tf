@@ -76,11 +76,15 @@ data "aws_ami" "app" {
   owners = ["self"]
 }
 
+data "aws_s3_bucket" "artifact_bucket" {
+  bucket = "cloudcasts-artifacts"
+}
+
 ###
 # Resources
 ##
 module "vpc" {
-  asource = "../modules/vpc"
+  source = "../modules/vpc"
 
   infra_env       = var.infra_env
   vpc_cidr        = "10.0.0.0/17"
@@ -90,7 +94,7 @@ module "vpc" {
 }
 
 module "autoscale_web" {
-  asource = "../modules/ec2"
+  source = "../modules/ec2"
 
   ami             = data.aws_ami.app.id
   git_url         = var.git_url
@@ -104,11 +108,15 @@ module "autoscale_web" {
   alb_subnets = module.vpc.vpc_public_subnets
   vpc_id      = module.vpc.vpc_id
 
-  artifact_bucket = module.ci_cd.artifact_bucket
+  min_size    = 0
+  max_size    = 5
+  desired_capacity = 2
+
+  artifact_bucket = data.aws_s3_bucket.artifact_bucket.arn
 }
 
 module "autoscale_queue" {
-  asource = "../modules/ec2"
+  source = "../modules/ec2"
 
   ami             = data.aws_ami.app.id
   git_url         = var.git_url
@@ -121,11 +129,15 @@ module "autoscale_queue" {
   asg_subnets = module.vpc.vpc_private_subnets
   vpc_id      = module.vpc.vpc_id
 
-  artifact_bucket = module.ci_cd.artifact_bucket
+  min_size    = 0
+  max_size    = 5
+  desired_capacity = 2
+
+  artifact_bucket = data.aws_s3_bucket.artifact_bucket.arn
 }
 
 module "deploy_app" {
-  asource = "../modules/codedeploy"
+  source = "../modules/codedeploy"
 
   infra_env    = var.infra_env
   deploy_groups = {
