@@ -80,7 +80,7 @@ data "aws_ami" "app" {
 # Resources
 ##
 module "vpc" {
-  source = "./modules/vpc"
+  asource = "../modules/vpc"
 
   infra_env       = var.infra_env
   vpc_cidr        = "10.0.0.0/17"
@@ -90,7 +90,7 @@ module "vpc" {
 }
 
 module "autoscale_web" {
-  source = "./modules/ec2"
+  asource = "../modules/ec2"
 
   ami             = data.aws_ami.app.id
   git_url         = var.git_url
@@ -108,7 +108,7 @@ module "autoscale_web" {
 }
 
 module "autoscale_queue" {
-  source = "./modules/ec2"
+  asource = "../modules/ec2"
 
   ami             = data.aws_ami.app.id
   git_url         = var.git_url
@@ -125,7 +125,7 @@ module "autoscale_queue" {
 }
 
 module "deploy_app" {
-  source = "./modules/codedeploy"
+  asource = "../modules/codedeploy"
 
   infra_env    = var.infra_env
   deploy_groups = {

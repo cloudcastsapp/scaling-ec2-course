@@ -1,10 +1,18 @@
 resource "aws_s3_bucket" "artifacts" {
-  bucket = "cloudcasts-${var.infra_env}-artifacts"
+  bucket = "cloudcasts-artifacts"
   acl    = "private"
+
+  tags = {
+    Name        = "cloudcasts - Artifacts Bucket"
+    Environment = var.infra_env
+    Project     = "cloudcasts"
+    Role        = "build"
+    ManagedBy   = "terraform"
+  }
 }
 
 resource "aws_iam_role" "this" {
-  name = "cloudcasts-${var.infra_env}-codebuild-role"
+  name = "cloudcasts-codebuild-role"
 
   assume_role_policy = <<EOF
 {
@@ -69,7 +77,7 @@ POLICY
 }
 
 resource "aws_codebuild_project" "this" {
-  name = "cloudcasts-${var.infra_env}-app-builder"
+  name = "cloudcasts-app-builder"
   description   = "Building CloudCasts Sample App"
   service_role = aws_iam_role.this.arn
 
@@ -96,13 +104,13 @@ resource "aws_codebuild_project" "this" {
 
   logs_config {
     cloudwatch_logs {
-      group_name = "codebuild/cloudcasts/${var.infra_env}"
+      group_name = "codebuild/cloudcasts"
       stream_name = "builds"
     }
 
 //    s3_logs {
 //      status = "ENABLED"
-//      location = "${aws_s3_bucket.artifacts.id}/${var.infra_env}-build-log"
+//      location = "${aws_s3_bucket.artifacts.id}/build-log"
 //    }
   }
 
@@ -114,7 +122,7 @@ resource "aws_codebuild_project" "this" {
   }
 
   tags = {
-    Name        = "cloudcasts - ${var.infra_env} - App Builder"
+    Name        = "cloudcasts - App Builder"
     Environment = var.infra_env
     Project     = "cloudcasts"
     Role        = "build"

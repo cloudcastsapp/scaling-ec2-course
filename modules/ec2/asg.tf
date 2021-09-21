@@ -7,9 +7,9 @@ resource "aws_autoscaling_group" "this" {
   name                = "cloudcasts-${var.infra_env}-${var.infra_role}-asg"
   vpc_zone_identifier = var.asg_subnets
 
-  min_size             = 0
-  max_size             = 5
-  desired_capacity     = 2
+  min_size             = var.min_size # 0
+  max_size             = var.max_size # 5
+  desired_capacity     = var.desired_capacity # 2
   termination_policies = ["OldestInstance"]
 
   health_check_type         = var.infra_role == "http" ? "ELB" : "EC2"

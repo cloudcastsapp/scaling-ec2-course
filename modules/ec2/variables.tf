@@ -72,3 +72,18 @@ variable "artifact_bucket" {
   type        = string
   description = "Application artifact bucket"
 }
+
+variable "min_size" {
+  type = number
+  description = "ASG minimum size"
+}
+
+variable "max_size" {
+  type = number
+  description = "ASG maximum size"
+}
+
+variable "desired_capacity" {
+  type = number
+  description = "ASG desired capacity"
+}
